@@ -1,6 +1,6 @@
 package com.fitnessmicroservice.user_service.models;
 
 public enum USER_ROLE {
-    USER,ADMIN
+    USER,ADMIN,TRAINER,GUEST
 
 }

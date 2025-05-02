@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fitnessmicroservice.user_service.dtos.RegisterUserDto;
+import com.fitnessmicroservice.user_service.exceptions.AuthenticationException;
 import com.fitnessmicroservice.user_service.exceptions.ResourceNotFoundException;
 import com.fitnessmicroservice.user_service.models.User;
 import com.fitnessmicroservice.user_service.repository.UserRepository;
