@@ -1,5 +1,11 @@
 package com.fitnessmicroservice.user_service.service;
 
+import com.fitnessmicroservice.user_service.exceptions.UsernameNotFoundException;
+import com.fitnessmicroservice.user_service.models.User;
+import com.fitnessmicroservice.user_service.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
