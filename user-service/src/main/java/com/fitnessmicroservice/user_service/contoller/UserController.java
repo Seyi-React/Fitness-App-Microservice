@@ -1,6 +1,8 @@
 package com.fitnessmicroservice.user_service.contoller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fitnessmicroservice.user_service.dtos.AuthenticationRequest;
+import com.fitnessmicroservice.user_service.dtos.AuthenticationResponse;
 import com.fitnessmicroservice.user_service.dtos.RegisterUserDto;
+import com.fitnessmicroservice.user_service.exceptions.AuthenticationException;
 import com.fitnessmicroservice.user_service.exceptions.ResourceNotFoundException;
 import com.fitnessmicroservice.user_service.models.User;
 import com.fitnessmicroservice.user_service.service.UserService;
@@ -68,6 +74,19 @@ public class UserController {
         User updatedUser = userService.updateUser(userId, user);
         return ResponseEntity.ok(updatedUser);
 
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
+        try {
+            AuthenticationResponse response = userService.authenticate(request);
+            return ResponseEntity.ok(response);
+
+        } catch (AuthenticationException ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
 }

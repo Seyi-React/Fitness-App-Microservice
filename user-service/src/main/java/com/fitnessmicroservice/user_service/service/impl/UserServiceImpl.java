@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fitnessmicroservice.user_service.config.JwtService;
 import com.fitnessmicroservice.user_service.dtos.AuthenticationRequest;
+import com.fitnessmicroservice.user_service.dtos.AuthenticationResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
         User newUser = User.builder()
             .name(user.getName())
             .email(user.getEmail())
-            .password(user.getPassword())
+            .password(passwordEncoder.encode(user.getPassword()))
             .build();
 
         return userRepository.save(newUser);
@@ -77,7 +78,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
         try {
             // Authenticate the user
             authenticationManager.authenticate(
@@ -87,9 +88,19 @@ public class UserServiceImpl implements UserService {
                 )
             );
 
-            // Retrieve and return the user from the repository
-            return userRepository.findByEmail(request.getEmail())
+            // Retrieve user from repository
+            User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+            // Generate JWT token
+            String jwtToken = jwtService.generateToken(user);
+
+            // Return user and token
+            return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .message("Authentication successful")
+                .username(user.getEmail())
+                .build();
 
         } catch (BadCredentialsException e) {
             // Handle incorrect email or password
