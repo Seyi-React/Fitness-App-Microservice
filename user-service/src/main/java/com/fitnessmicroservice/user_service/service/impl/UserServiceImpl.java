@@ -99,7 +99,10 @@ public class UserServiceImpl implements UserService {
             return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .message("Authentication successful")
-                .username(user.getEmail())
+                .username(user.getName())
+                .email(user.getEmail())
+                .userId(user.getId())
+                // .role(user.getRole())
                 .build();
 
         } catch (BadCredentialsException e) {
