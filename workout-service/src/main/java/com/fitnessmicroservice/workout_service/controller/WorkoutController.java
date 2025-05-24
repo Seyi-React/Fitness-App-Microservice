@@ -18,6 +18,11 @@ public class WorkoutController {
 
     private final WorkoutService workoutService;
 
+    @GetMapping("/hello")
+    public String sayHello() {
+        return "Hello from Workout Service!????";
+    }
+
 
     @PostMapping
     public ResponseEntity<Workout> createWorkout(@RequestBody Workout workout) {

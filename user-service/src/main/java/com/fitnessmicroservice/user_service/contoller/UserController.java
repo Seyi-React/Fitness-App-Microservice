@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.fitnessmicroservice.user_service.dtos.AuthenticationRequest;
 import com.fitnessmicroservice.user_service.dtos.AuthenticationResponse;
@@ -32,6 +33,20 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService userService;
+    private final RestTemplate restTemplate;
+
+
+
+    @GetMapping("/call-workout")
+    public String callWorkoutService() {
+        String workoutUrl = "http://localhost:8082/api/v1/workouts/hello";
+        String response = restTemplate.getForObject(workoutUrl, String.class);
+
+        System.out.println("Response from Workout Service: " + response);
+
+        return "Called Workout Service: " + response;
+    }
+
 
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable("userId") Integer userId) {
