@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 
 @Data
-// @RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 public class ErrorResponse {

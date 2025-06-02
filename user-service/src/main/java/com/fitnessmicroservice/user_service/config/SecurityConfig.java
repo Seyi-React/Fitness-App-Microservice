@@ -3,6 +3,7 @@ package com.fitnessmicroservice.user_service.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,21 +27,25 @@ public class SecurityConfig {
     private final JwtTokenFilter jwtTokenFilter;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     
-    @Bean   
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
-                .anyRequest().permitAll()
-            )
+            .requestMatchers("/api/v1/users/login", "/api/v1/users").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
+            .anyRequest().authenticated()
+        )
+        
             .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
             );
         return http.build();
     }
+    
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
