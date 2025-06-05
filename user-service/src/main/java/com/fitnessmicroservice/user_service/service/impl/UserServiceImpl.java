@@ -102,7 +102,6 @@ public class UserServiceImpl implements UserService {
                 .username(user.getName())
                 .email(user.getEmail())
                 .userId(user.getId())
-                // .role(user.getRole())
                 .build();
 
         } catch (BadCredentialsException e) {

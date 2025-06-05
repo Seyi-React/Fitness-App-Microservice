@@ -27,11 +27,11 @@ import lombok.NoArgsConstructor;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String email;
-    // @JsonIgnore
+    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -43,12 +43,12 @@ public class User implements UserDetails {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt; 
+    private LocalDateTime updatedAt;
 
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @JsonIgnore
